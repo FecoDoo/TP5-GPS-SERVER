@@ -5,7 +5,7 @@ use think\Request;
 use app\api\controller\Send;
 use app\api\controller\Oauth;
 use think\facade\Cache;
-
+use think\Db;
 /**
  * 生成token
  */
@@ -20,12 +20,13 @@ class Token
 
 	public static $accessTokenPrefix = 'accessToken_';
 	public static $refreshAccessTokenPrefix = 'refreshAccessToken_';
-	public static $expires = 7200;
+	// public static $expires = 7200;
+	public static $expires = 60*60*24*30;
 	public static $refreshExpires = 60*60*24*30;   //刷新token过期时间
 	/**
 	 * 测试appid，正式请数据库进行相关验证
 	 */
-	public static $appid = 'tp5restfultest';
+	public static $appid = 'gps';
 	/**
 	 * appsercet
 	 */
@@ -42,9 +43,15 @@ class Token
 			return self::returnMsg(401,$validate->getError());
 		}
 		self::checkParams(input(''));  //参数校验
+
 		//数据库已经有一个用户,这里需要根据input('mobile')去数据库查找有没有这个用户
+		if (!empty(Db::table('token')->where('mobile',input('mobile'))->find())){
+			return self::returnMsg(500,'user already exits');
+		}
+
+		$countid = Db::table('token')->count('uid');
 		$userInfo = [
-			'uid'   => 1,
+			'uid'   => $countid + 1,
 			'mobile'=> input('mobile')
 		]; //虚拟一个uid返回给调用方
 		try {
@@ -113,8 +120,9 @@ class Token
 			'expires_time'  => time() + self::$expires,      //过期时间时间戳
 			'refresh_token' => $refresh_token,//刷新的token
 			'refresh_expires_time'  => time() + self::$refreshExpires,      //过期时间时间戳
-			'client'        => $clientInfo,//用户信息
-		];
+			//'client'        => $clientInfo,//用户信息
+		] + $clientInfo;
+
 		self::saveAccessToken($accessToken, $accessTokenInfo);  //保存本次token
 		self::saveRefreshToken($refresh_token,$clientInfo['appid']);
 		return $accessTokenInfo;
@@ -148,7 +156,12 @@ class Token
 	protected static function saveAccessToken($accessToken, $accessTokenInfo)
 	{
 		//存储accessToken
-		cache(self::$accessTokenPrefix . $accessToken, $accessTokenInfo, self::$expires);
+		try {
+			Db::table('token')->strict(false)->insert($accessTokenInfo);
+			cache(self::$accessTokenPrefix . $accessToken, $accessTokenInfo, self::$expires);
+		} catch (Exception $e) {
+			return self::returnMsg(500, 'fail', $e);
+		}
 	}
 
 	/**

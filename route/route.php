@@ -15,5 +15,7 @@ Route::resource(':version/user','api/:version.user');       //资源路由
 
 Route::post(':version/token','api/:version.token/token');  //生成access_token
 
+Route::get('index','index/index/index');
+
 //所有路由匹配不到情况下触发该路由
 Route::miss('\app\api\controller\Exception::miss');

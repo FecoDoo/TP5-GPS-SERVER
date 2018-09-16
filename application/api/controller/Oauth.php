@@ -74,7 +74,7 @@ class Oauth
 		if(!$getCacheAccessToken){
 			return self::returnMsg(401,'fail',"access_token不存在或为空");
 		}
-		if($getCacheAccessToken['client']['appid'] !== $data['appid']){
+		if($getCacheAccessToken['appid'] !== $data['appid']){
 
 			return self::returnMsg(401,'fail',"appid错误");  //appid与缓存中的appid不匹配
 		}
