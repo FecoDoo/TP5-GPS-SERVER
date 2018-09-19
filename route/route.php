@@ -9,12 +9,17 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 
-Route::get(':version/address/:id','api/:version.user/address');  //一般路由规则，
+//一般路由规则
+Route::get(':version/address/:id','api/:version.user/address');
 
-Route::resource(':version/user','api/:version.user');       //资源路由
+//资源路由
+Route::resource(':version/user','api/:version.user');
+Route::resource(':version/student','api/:version.student');
 
-Route::post(':version/token','api/:version.token/token');  //生成access_token
+//生成access_token
+Route::post(':version/token','api/:version.token/token');
 
+//测试路由
 Route::get('index','index/index/index');
 
 //所有路由匹配不到情况下触发该路由

@@ -5,7 +5,7 @@ use app\api\controller\Send;
 use think\Exception;
 use think\facade\Request;
 use think\facade\Cache;
-
+use think\Db;
 /**
  * API鉴权验证
  */
@@ -70,11 +70,13 @@ class Oauth
 	 */
 	public static function certification($data = []){
 
-		$getCacheAccessToken = Cache::get(self::$accessTokenPrefix . $data['access_token']);  //获取缓存access_token
-		if(!$getCacheAccessToken){
+		// $getCacheAccessToken = Cache::get(self::$accessTokenPrefix . $data['access_token']);  //获取缓存access_token
+		$getAccessToken = Db::table('token')->where('access_token', $data['access_token'])->find(); 
+
+		if(empty($getAccessToken)){
 			return self::returnMsg(401,'fail',"access_token不存在或为空");
 		}
-		if($getCacheAccessToken['appid'] !== $data['appid']){
+		if($getAccessToken['appid'] !== $data['appid']){
 
 			return self::returnMsg(401,'fail',"appid错误");  //appid与缓存中的appid不匹配
 		}

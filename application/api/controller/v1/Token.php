@@ -67,11 +67,25 @@ class Token
 	 */
 	public function refresh($refresh_token='',$appid = '')
 	{
-		$cache_refresh_token = Cache::get(self::$refreshAccessTokenPrefix.$appid);  //查看刷新token是否存在
-		if(!$cache_refresh_token){
+		//查看刷新token是否存在
+		// $cache_refresh_token = Cache::get(self::$refreshAccessTokenPrefix.$appid);
+		$db_refresh_token = '';
+		$refresh_token_exist = 0;
+		
+		try {
+			if (!empty($db_refresh_token = Db::table('token')->where('refresh_token', $refresh_token)->find())){
+				$refresh_token_exist = 1; // Not null 
+			} else {
+				$refresh_token_exist = 0;
+			}
+		} catch (	Exception $e) {
+			return self::returnMsg(500,'fail',$e);
+		}
+
+		if($refresh_token_exist){
 			return self::returnMsg(401,'fail','refresh_token is null');
 		}else{
-			if($cache_refresh_token !== $refresh_token){
+			if($db_refresh_token !== $refresh_token){
 				return self::returnMsg(401,'fail','refresh_token is error');
 			}else{    //重新给用户生成调用token
 				$data['appid'] = $appid;
@@ -124,7 +138,7 @@ class Token
 		] + $clientInfo;
 
 		self::saveAccessToken($accessToken, $accessTokenInfo);  //保存本次token
-		self::saveRefreshToken($refresh_token,$clientInfo['appid']);
+		// self::saveRefreshToken($refresh_token,$clientInfo['appid']);
 		return $accessTokenInfo;
 	}
 
@@ -133,7 +147,13 @@ class Token
 	 */
 	public static function getRefreshToken($appid = '')
 	{
-		return Cache::get(self::$refreshAccessTokenPrefix.$appid) ? Cache::get(self::$refreshAccessTokenPrefix.$appid) : self::buildAccessToken(); 
+		$res = Db::table('token')->where('appid', $appid)->find('refresh_token');
+		if (empty($res)) {
+			self::buildAccessToken();
+		} else {
+			return $res;
+		}
+		// return Cache::get(self::$refreshAccessTokenPrefix.$appid) ? Cache::get(self::$refreshAccessTokenPrefix.$appid) : self::buildAccessToken(); 
 	}
 
 	/**
@@ -158,7 +178,7 @@ class Token
 		//存储accessToken
 		try {
 			Db::table('token')->strict(false)->insert($accessTokenInfo);
-			cache(self::$accessTokenPrefix . $accessToken, $accessTokenInfo, self::$expires);
+			// cache(self::$accessTokenPrefix . $accessToken, $accessTokenInfo, self::$expires);
 		} catch (Exception $e) {
 			return self::returnMsg(500, 'fail', $e);
 		}
@@ -172,6 +192,6 @@ class Token
 	protected static function saveRefreshToken($refresh_token,$appid)
 	{
 		//存储RefreshToken
-		cache(self::$refreshAccessTokenPrefix.$appid,$refresh_token,self::$refreshExpires);
+		// cache(self::$refreshAccessTokenPrefix.$appid,$refresh_token,self::$refreshExpires);
 	}
 }
