@@ -11,9 +11,10 @@ class Token extends Validate
 	protected $rule = [
         'appid'       =>  'require',
         'mobile'      =>  'mobile|require',
+        'passwd'      =>  'require',
         'nonce'       =>  'require',
         'timestamp'   =>  'number|require',
-        'sign'        =>  'require'
+        'sign'        =>  'require',
     ];
 
     protected $message  =   [
@@ -21,6 +22,7 @@ class Token extends Validate
         'mobile.mobile'    => '手机格式错误',
         'nonce.require'    => '随机数不能为空',
         'timestamp.number' => '时间戳格式错误',
-        'sign.require'     => '签名不能为空',    
+        'sign.require'     => '签名不能为空',
+        'passwd.require'   => '密码不能为空', 
     ];
 }

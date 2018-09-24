@@ -10,6 +10,8 @@ use app\api\controller\Send;
 class Student extends Api
 {
 	use Send;
+
+
 	/**
 	 * 显示资源列表
 	 *

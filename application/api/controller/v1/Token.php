@@ -45,15 +45,21 @@ class Token
 		self::checkParams(input(''));  //参数校验
 
 		//数据库已经有一个用户,这里需要根据input('mobile')去数据库查找有没有这个用户
-		if (!empty(Db::table('token')->where('mobile',input('mobile'))->find())){
-			return self::returnMsg(500,'user already exits');
+
+		if (empty(Db::table('student')->where('mobile',input('mobile'))->find())){
+			return self::returnMsg(500,'user does not exit');
+		}
+
+		//密码校验
+		if (input('passwd') !== Db::table('student')->where('mobile',input('mobile'))->value('password')) {
+			return self::returnMsg(400, 'password not correct');
 		}
 
 		$countid = Db::table('token')->count('uid');
 		$userInfo = [
-			'uid'   => $countid + 1,
+			'uid'   => $countid,
 			'mobile'=> input('mobile')
-		]; //虚拟一个uid返回给调用方
+		];
 		try {
 			$accessToken = self::setAccessToken(array_merge($userInfo,input('')));  //传入参数应该是根据手机号查询改用户的数据
 			return self::returnMsg(200,'success',$accessToken);
@@ -78,7 +84,7 @@ class Token
 			} else {
 				$refresh_token_exist = 0;
 			}
-		} catch (	Exception $e) {
+		} catch (Exception $e) {
 			return self::returnMsg(500,'fail',$e);
 		}
 
@@ -116,6 +122,7 @@ class Token
 		if($sign !== $params['sign']){
 			return self::returnMsg(401,'sign错误','sign：'.$sign);
 		}
+
 	}
 
 	/**
@@ -125,19 +132,39 @@ class Token
 	 */
 	protected function setAccessToken($clientInfo)
 	{
-		//生成令牌
-		$accessToken = self::buildAccessToken();
-		$refresh_token = self::getRefreshToken($clientInfo['appid']);
+		//参数初始化
+		$access_token = '';
+		$refresh_token = '';
+		$accessTokenInfo = [];
 
-		$accessTokenInfo = [
-			'access_token'  => $accessToken,//访问令牌
-			'expires_time'  => time() + self::$expires,      //过期时间时间戳
-			'refresh_token' => $refresh_token,//刷新的token
-			'refresh_expires_time'  => time() + self::$refreshExpires,      //过期时间时间戳
-			//'client'        => $clientInfo,//用户信息
-		] + $clientInfo;
+		//判断是否已存在当前用户的Token
+		$res = Db::table('token')->where('mobile',$clientInfo['mobile'])->find();
+		if (!empty($res)) {
+			
+			//获取令牌
+			$accessTokenInfo = [
+				'access_token' => $res['access_token'],
+				'expires_time' => $res['expires_time'],
+				'refresh_token' => $res['refresh_token'],
+				'refresh_expires_time' => $res['refresh_expires_time'],
+			] + $clientInfo;
+		} else {
+			//生成令牌
+			$access_token = self::buildAccessToken();
+			$refresh_token = self::getRefreshToken($clientInfo['appid']);
 
-		self::saveAccessToken($accessToken, $accessTokenInfo);  //保存本次token
+			$accessTokenInfo = [
+				'access_token'  => $access_token,//访问令牌
+				'expires_time'  => time() + self::$expires,//过期时间时间戳
+				'refresh_token' => $refresh_token,//刷新的token
+				'refresh_expires_time'  => time() + self::$refreshExpires,//过期时间时间戳
+			] + $clientInfo;
+
+			//保存本次token
+			self::saveAccessToken($access_token, $accessTokenInfo);
+		}
+
+		unset($accessTokenInfo['nonce'],$accessTokenInfo['passwd']);
 		// self::saveRefreshToken($refresh_token,$clientInfo['appid']);
 		return $accessTokenInfo;
 	}
@@ -147,12 +174,7 @@ class Token
 	 */
 	public static function getRefreshToken($appid = '')
 	{
-		$res = Db::table('token')->where('appid', $appid)->find('refresh_token');
-		if (empty($res)) {
-			self::buildAccessToken();
-		} else {
-			return $res;
-		}
+		return self::buildAccessToken();
 		// return Cache::get(self::$refreshAccessTokenPrefix.$appid) ? Cache::get(self::$refreshAccessTokenPrefix.$appid) : self::buildAccessToken(); 
 	}
 
@@ -173,7 +195,7 @@ class Token
 	 * @param $accessToken
 	 * @param $accessTokenInfo
 	 */
-	protected static function saveAccessToken($accessToken, $accessTokenInfo)
+	protected static function saveAccessToken($access_token, $accessTokenInfo)
 	{
 		//存储accessToken
 		try {
