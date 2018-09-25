@@ -45,19 +45,18 @@ class Token
 		self::checkParams(input(''));  //参数校验
 
 		//数据库已经有一个用户,这里需要根据input('mobile')去数据库查找有没有这个用户
-
-		if (empty(Db::table('student')->where('mobile',input('mobile'))->find())){
+		$res = Db::table('student')->where('mobile',input('mobile'))->find();
+		if (empty($res)){
 			return self::returnMsg(500,'user does not exit');
 		}
 
 		//密码校验
-		if (input('passwd') !== Db::table('student')->where('mobile',input('mobile'))->value('password')) {
+		if (input('passwd') !== $res['password']) {
 			return self::returnMsg(400, 'password not correct');
 		}
 
-		$countid = Db::table('token')->count('uid');
 		$userInfo = [
-			'uid'   => $countid,
+			'uid'   => $res['id'],
 			'mobile'=> input('mobile')
 		];
 		try {

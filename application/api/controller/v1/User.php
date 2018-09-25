@@ -1,15 +1,10 @@
 <?php
-
 namespace app\api\controller\v1;
-
 use think\Controller;
 use think\Request;
 use app\api\controller\Api;
-use app\api\controller\Send;
-
 class User extends Api
 {
-	use Send;
 	/**
 	 * 显示资源列表
 	 *
@@ -17,9 +12,8 @@ class User extends Api
 	 */
 	public function index()
 	{      
-	   
+	   dump($this->uid);
 	}
-
 	/**
 	 * 显示创建资源表单页.
 	 *
@@ -27,9 +21,8 @@ class User extends Api
 	 */
 	public function create()
 	{
-		self::returnMsg($code = 200,$message = 'success',$data = [],$header = []);
+		echo "create";
 	}
-
 	/**
 	 * 保存新建的资源
 	 *
@@ -41,7 +34,6 @@ class User extends Api
 		dump($this->uid);
 		echo "save";
 	}
-
 	/**
 	 * 显示指定的资源
 	 *
@@ -50,9 +42,8 @@ class User extends Api
 	 */
 	public function read($id)
 	{
-		echo "read";
+		//echo "read";
 	}
-
 	/**
 	 * 显示编辑资源表单页.
 	 *
@@ -63,7 +54,6 @@ class User extends Api
 	{
 		echo "edit";
 	}
-
 	/**
 	 * 保存更新的资源
 	 *
@@ -75,7 +65,6 @@ class User extends Api
 	{
 		echo "update";
 	}
-
 	/**
 	 * 删除指定资源
 	 *
@@ -86,8 +75,6 @@ class User extends Api
 	{
 		echo "delete";
 	}
-
-
 	public function address($id)
 	{
 		echo "address-";

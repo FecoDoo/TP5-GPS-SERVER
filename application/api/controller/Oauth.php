@@ -71,14 +71,16 @@ class Oauth
 	public static function certification($data = []){
 
 		// $getCacheAccessToken = Cache::get(self::$accessTokenPrefix . $data['access_token']);  //获取缓存access_token
-		$getAccessToken = Db::table('token')->where('access_token', $data['access_token'])->find(); 
+		$getAccessToken = Db::table('token')->where('uid', $data['uid'])->find(); 
 
 		if(empty($getAccessToken)){
-			return self::returnMsg(401,'fail',"access_token不存在或为空");
+			return self::returnMsg(401,'fail','数据库中无当前登录信息，请重新登陆');
 		}
 		if($getAccessToken['appid'] !== $data['appid']){
-
-			return self::returnMsg(401,'fail',"appid错误");  //appid与缓存中的appid不匹配
+			return self::returnMsg(401,'fail',"appid错误");  //appid与数据库中的appid不匹配
+		}
+		if($getAccessToken['access_token'] !== $data['access_token']){
+			return self::returnMsg(401,'fail','access_token不存在或为空');  //uid与数据库中的uid不匹配
 		}
 		return $data;
 	}
