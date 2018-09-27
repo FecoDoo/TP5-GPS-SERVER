@@ -8,12 +8,40 @@
 
 ## Token
 * url(POST)
+    
     http://47.106.64.85/v1/token
+
 * header
+    
     | appid | mobile | nonce | timestamp | sign | passwd |
     |-|-|-|-|-|-|
     |gps|15968158372|124134124|时间戳|MD5签名|123456|
 
+* POST参数
+
+    NULL
+
+* 返回数据参考
+```json
+{
+    "code": 200,
+    "message": "success",
+    "data": {
+        "access_token": "o81xa76qtv5GFC4cOTyEIL2u1MSmgY4X",
+        "expires_time": 1540629689,
+        "refresh_token": "v34wH3ZWt26aY8ogkMCiF1cRAsGBeQbd",
+        "refresh_expires_time": 1540629689,
+        "uid": 4,
+        "mobile": "15968158372",
+        "appid": "gps",
+        "timestamp": "1538059006",
+        "sign": "2c47478bca6fc438d079172577415f07",
+        "version": "v1"
+    }
+}
+```
+
+---
 
 ## 学生模块
 
