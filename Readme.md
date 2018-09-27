@@ -6,6 +6,15 @@
 
 ---
 
+## Token
+* url(POST)
+    http://47.106.64.85/v1/token
+* header
+    | appid | mobile | nonce | timestamp | sign | passwd |
+    |-|-|-|-|-|-|
+    |gps|15968158372|124134124|时间戳|MD5签名|123456|
+
+
 ## 学生模块
 
 ### 获取学生信息
