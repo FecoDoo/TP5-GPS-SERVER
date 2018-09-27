@@ -17,7 +17,7 @@ class Clas extends Validate
         'cid.require'=>'需要课程id',
     ];
 
-    protected $currentScene = [
+    protected $scene = [
         'info' => ['cid'],
     ];
 }

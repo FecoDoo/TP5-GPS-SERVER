@@ -12,6 +12,7 @@ class Student extends Validate
         'mobile'    =>  'mobile|max:13',
         'password'    =>  'max:12',
         'name'  =>  'max:12',
+        'username' => 'max:12',
         'sex'   =>  'max:2',
         'address'   =>  'max:50',
         'idcard'    => 'max:18',
@@ -23,9 +24,10 @@ class Student extends Validate
         'hobby' => 'max:20',
         'speciality'    => 'max:50',
         'honor' => 'max:50',
-
+        'birthday' => 'date',
         'type' => 'boolean|require',
         'cid' => 'require|max:12',
+        'photo' => 'image',
     ];
 
     protected $message  =   [
@@ -33,6 +35,7 @@ class Student extends Validate
         'mobile.max'    => '手机号最大长度为13',
         'password.max'    => '密码最大长度为12',
         'name.max' => '姓名最大长度12',
+        'username.max' => '昵称最大长度12',
         'sex.max' => '性别长度为2',
         'address.max'     => '地址长度为50',
         'idcard.max'   => '身份证长度18',
@@ -47,12 +50,14 @@ class Student extends Validate
         'type.require'=>'需要操作类型',
         'cid.max'=>'课程ID最大12',
         'cid.require'=>'需要课程id',
+        'birthday.date' => '日期格式错误',
+        'photo.image' => '照片格式错误', 
     ];
 
-    protected $currentScene = [
-        'update' => ['mobile','password','name','sex','address','idcard','email','education','school','major','practice','hobby','speciality','
-        honor'],
+    protected $scene = [
+        'update' => ['mobile','username','password','name','sex','photo','birthday','address','idcard','email','education','school','major','practice','hobby','speciality','honor'],
         'class' => ['type','cid'],
         'classInfo' => ['cid'],
     ];
 }
+

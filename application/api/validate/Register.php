@@ -50,7 +50,7 @@ class Register extends Validate
         'type.require'=>'需要操作类型',
     ];
 
-    protected $currentScene = [
+    protected $scene = [
         'student' => ['mobile','password','name','sex','address','idcard','email','education','school','major','practice','hobby','speciality','type','honor'],
         'enterprise' => [],
 

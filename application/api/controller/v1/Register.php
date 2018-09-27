@@ -35,10 +35,10 @@ class Register
 	/////////////////////////////工具函数
 
 	//参数验证
-	private static function checkData($data = [],$type = 'student')
+	private static function checkData($data = [],$scene = 'student')
 	{	
 		$validate = new \app\api\validate\Register;
-		if(!$validate->check($data,'',$type)){
+		if(!$validate->check($data,'',$scene)){
 			return self::returnMsg(401,$validate->getError());
 		}
 	}

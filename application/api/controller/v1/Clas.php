@@ -41,10 +41,10 @@ class Clas extends Api
 	/////////////////////////////工具函数
 
 	//参数验证
-	private static function checkData($data = [],$type = 'info')
+	private static function checkData($data = [],$scene = 'info')
 	{	
 		$validate = new \app\api\validate\Clas;
-		if(!$validate->check($data,'',$type)){
+		if(!$validate->check($data,'',$scene)){
 			return self::returnMsg(401,$validate->getError());
 		}
 	}

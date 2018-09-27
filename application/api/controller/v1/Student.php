@@ -98,8 +98,7 @@ class Student extends Api
 					} catch (Exception $e) {
 						self::returnMsg(401,'选择班级失败',$e);
 					}
-				}
-				
+				}	
 			} else {
 				self::returnMsg(401,'已在该班级内');
 			}
@@ -114,27 +113,31 @@ class Student extends Api
 				if ($res == 0) {
 					self::returnMsg(401,'退出失败');
 				} else {
-					self::returnMsg(200,'OK',$res);
+					self::returnMsg(200,'OK');
 				}
 			}
-			
 		}
-
 	}
 
-	public function courseInfo()
+	public function classInfo()
 	{
 		$id = Db::table('token')->where('access_token',$this->clientInfo['access_token'])->value('uid');
 		try{
 			$cid = Db::table('stu_class')->where('sid',$id)->value('cid');
 			if (empty($cid)) {
-				self::returnMsg(401,'你未参加任何课程');
+				self::returnMsg(401,'你未参加任何班级');
 			} else {
+				$class = Db::table('class')->where('id',$cid)->select();
+
 				$res = Db::table('course')->where('cid',$cid)->select();
-				if (empty($res)) {
+				if (empty($class)) {
 					self::returnMsg(401,'你参加的班级暂时没有课程');
 				} else {
-					self::returnMsg(200,'OK',$res);
+					$data = [
+						'class' => $class,
+						'course' => $res,
+					];
+					self::returnMsg(200,'OK',$data);
 				}
 			}
 		} catch (Exception $e) {
@@ -163,10 +166,10 @@ class Student extends Api
 
 	//////////////////////////////////工具函数
 	//参数验证
-	private static function checkData($data = [],$type = '')
+	private static function checkData($data = [],$scene = '')
 	{	
 		$validate = new \app\api\validate\Student;
-		if(!$validate->check($data,'',$type)){
+		if(!$validate->check($data,[],'update')){
 			return self::returnMsg(401,$validate->getError());
 		}
 	}
