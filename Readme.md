@@ -59,7 +59,7 @@
 * post参数
 
     |mobile|username|password|name|sex|photo|birthday|address|idcard|email|education|school|major|practice|hobby|speciality|honor|
-    |-|-|
+    |-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|
     | 手机号 | 昵称 |密码|姓名|性别|照片|生日|地址|身份证|电子邮件|教育经历|学校|专业|实习经历|爱好|特长|荣誉|
 
 * 返回数据参考:
