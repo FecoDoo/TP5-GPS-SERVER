@@ -22,6 +22,8 @@ class Student extends Api
 		self::returnMsg(200,'OK',$this->clientInfo);
 	}
 
+	
+
 	/**
 	 * 显示学生信息
 	 *
@@ -39,39 +41,34 @@ class Student extends Api
 		}
 	}
 
-	// public function classScore()
-	// {
-	// 	$id = Db::table('token')->where('access_token',$this->clientInfo['access_token'])->value('uid');
-	// 	try{
-	// 		$res = Db::table('stu_class')->where('sid',$id)->select();
-	// 		if (empty($res)) {
-	// 			self::returnMsg(401,'你未参加任何课程');
-	// 		} else {
-	// 			$info = Db::table('student')->where('id',$id)->find();
+	public function classScore()
+	{
+		$id = Db::table('token')->where('access_token',$this->clientInfo['access_token'])->value('uid');
+		try{
+			$res = Db::table('stu_class')->where('sid',$id)->select();
+			if (empty($res)) {
+				self::returnMsg(401,'你未参加任何班级');
+			} else {
+				$info = Db::table('student')->where('id',$id)->find();
+				$data = array();
 				
-	// 			$count1 = Db::table('stu_class')->where('sid',$id)->count();
-	// 			$count2 = 0;
-	// 			for ($i = 0;$i<$count1;$i++){
-	// 				$count2 += Db::table('course')->where('id',$res['cid'])->count();
-	// 			}
-	// 			$temp = array();
-	// 			$count = Db::table('class')->where('id',$res['cid'])->count();
-				
-	// 			for ($i = 0;$i<$count;$i++){
-	// 				$class = Db::table('class')->where('id',$value['cid'])->value('name');
-	// 				$temp[$i] = $class;
-	// 			}	
-	// 		}
-	// 		$data = [
-	// 			'name' => $info['name'],
-	// 			'school' => $info['school'],
-	// 			'score' => $temp
-	// 		];
-	// 		self::returnMsg(200,'OK',$data);
-	// 	} catch (Exception $e) {
-	// 		self::returnMsg(401,'Failed',$e);
-	// 	}
-	// }
+				for ($i = 0;$i < count($res);$i++)
+				{
+					
+					$data[$i]['class'] = Db::table('class')->where('id',$res[$i]['cid'])->value('name');
+					$data[$i]['name'] =	$info['name'];
+					$data[$i]['school'] = $info['school'];
+					$data[$i]['score'] = $res[$i]['score'];
+					$data[$i]['progress'] = $res[$i]['progress'];
+
+					//unset($res[$i]['cid'],$res[$i]['sid']);
+				}
+			}
+			self::returnMsg(200,'OK',$data);
+		} catch (Exception $e) {
+			self::returnMsg(401,'Failed',$e);
+		}
+	}
 
 	/**
 	 * 更改班级信息 

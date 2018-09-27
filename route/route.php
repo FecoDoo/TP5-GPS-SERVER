@@ -10,6 +10,8 @@
 // +----------------------------------------------------------------------
 
 //一般路由规则
+//注册
+Route::post('v1/register','api/v1.register/register');
 //学生
 Route::get('v1/student/index','api/v1.student/index');
 Route::get('v1/student/info','api/v1.student/info');

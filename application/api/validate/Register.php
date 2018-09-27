@@ -1,23 +1,25 @@
 <?php
+
 namespace app\api\validate;
 
 use think\Validate;
 /**
- * 生成Student参数验证器
+ * 生成Register参数验证器
  */
-class Student extends Validate
+class Register extends Validate
 {
 	
 	protected $rule = [
-        'mobile'    =>  'mobile|max:13',
-        'password'    =>  'max:12',
-        'name'  =>  'max:12',
-        'sex'   =>  'max:2',
+        'mobile'    =>  'require|mobile|max:13',
+        'password'    =>  'require|max:12',
+        'name'  =>  'require|max:12',
+        'username' => 'require|max:12',
+        'sex'   =>  'require|max:2',
         'address'   =>  'max:50',
         'idcard'    => 'max:18',
-        'email' => 'email|max:50',
+        'email' => 'require|email|max:50',
         'education' => 'max:12',
-        'school'    => 'max:12',
+        'school'    => 'require|max:12',
         'major' => 'max:20',
         'practice'  => 'max:50',
         'hobby' => 'max:20',
@@ -25,7 +27,6 @@ class Student extends Validate
         'honor' => 'max:50',
 
         'type' => 'boolean|require',
-        'cid' => 'require|max:12',
     ];
 
     protected $message  =   [
@@ -33,6 +34,8 @@ class Student extends Validate
         'mobile.max'    => '手机号最大长度为13',
         'password.max'    => '密码最大长度为12',
         'name.max' => '姓名最大长度12',
+        'username.max' => '昵称最大长度12',
+        'username.require' => '昵称不能为空',
         'sex.max' => '性别长度为2',
         'address.max'     => '地址长度为50',
         'idcard.max'   => '身份证长度18',
@@ -45,14 +48,11 @@ class Student extends Validate
         'speciality.max'=>'特长最大长度50',
         'honor.max'=>'所获荣誉最大长度50',
         'type.require'=>'需要操作类型',
-        'cid.max'=>'课程ID最大12',
-        'cid.require'=>'需要课程id',
     ];
 
     protected $currentScene = [
-        'update' => ['mobile','password','name','sex','address','idcard','email','education','school','major','practice','hobby','speciality','
-        honor'],
-        'class' => ['type','cid'],
-        'classInfo' => ['cid'],
+        'student' => ['mobile','password','name','sex','address','idcard','email','education','school','major','practice','hobby','speciality','type','honor'],
+        'enterprise' => [],
+
     ];
 }
