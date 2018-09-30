@@ -2,7 +2,7 @@
 
 ## 目录结构
 
-[TOC]
+[toc]
 
 ---
 
@@ -13,9 +13,9 @@
 
 * header
     
-    | appid | mobile | nonce | timestamp | sign | passwd |
-    |-|-|-|-|-|-|
-    |gps|15968158372|124134124|时间戳|MD5签名|123456|
+    | appid | mobile | passwd | nonce | timestamp | sign |
+    |-------|--------|--------|-------|-----------|------|
+    | gps | 15968158372 | 123456 | 124134124 | 时间戳 | MD5签名 |
 
 * POST参数
 
@@ -31,16 +31,53 @@
         "expires_time": 1540629689,
         "refresh_token": "v34wH3ZWt26aY8ogkMCiF1cRAsGBeQbd",
         "refresh_expires_time": 1540629689,
-        "uid": 4,
-        "mobile": "15968158372",
         "appid": "gps",
-        "timestamp": "1538059006",
-        "sign": "2c47478bca6fc438d079172577415f07",
-        "version": "v1"
+        "mobile": "15968158372",
+        "timestamp": "1538280098",
+        "sign": "829aa47ee1bd8132ebc06e5c8637f143",
+        "uid": 4
     }
 }
 ```
 
+---
+
+## 注册模块
+* url(POST)
+    http://47.106.64.85/v1/register
+* header
+    NULL
+* post参数
+    
+    |mobile|password|name|username|sex|address|idcard|email|education|school|major|practice|hobby|speciality|honor|type|
+    |-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|
+    |手机号(必)|密码(必)|姓名(必)|昵称(必)|性别(必)|地址|身份证|邮箱(必)|教育背景|学校|专业|实习经历|爱好|特长|荣誉|类型(0:学生 1:企业)|
+
+* 返回数据参考:
+```json
+{
+    "code": 200,
+    "message": "OK",
+    "data": {
+        "username": "ac", //昵称
+        "name": "ac", //姓名
+        "sex": "男",
+        "address": "hz",
+        "birthday": "2018-09-19",
+        "idcard": "33018419960207864",
+        "email": "fecodoo@aliyun.com",
+        "photo": null,
+        "mobile": "13588888888",
+        "education": "bachelor", //教育背景
+        "school": "ZJUT",
+        "major": "EE", //专业
+        "practice": null, //实习经历
+        "hobby": "Game",
+        "speciality": "Nothing", //特长
+        "honor": "校会主席" //荣誉
+    }
+}
+```
 ---
 
 ## 学生模块
@@ -212,9 +249,9 @@
 
 * post参数
 
-    |type|cid|
-    |-|-|
-    |更改类型（0为退出班级 1为加入班级）|课程ID|
+    | type | cid |
+    |------|-----|
+    | 更改类型(0为退出班级 1为加入班级) | 课程ID |
 
 * 返回数据参考:
 

@@ -17,6 +17,17 @@ class Register
 		$data = input('');
 		$this->checkData($data);
 
+		if (!$res) {
+			self::student($data);
+		} else {
+			self::enterprise($data);
+		}
+		
+	}
+
+	//学生注册
+	public function student($data = [])
+	{
 		$res = Db::table('student')->where('mobile',$data['mobile'])->find();
 		if (empty($res)) {
 			try {
@@ -32,7 +43,26 @@ class Register
 		}
 	}
 
+	//企业注册
+	public function enterprise($data = [])
+	{
+		// $res = Db::table('enterprise')->where('mobile',$data['mobile'])->find();
+		// if (empty($res)) {
+		// 	try {
+		// 		unset($data['type']);
+		// 		$res = Db::table('enterprise')->insert($data);
+		// 		unset($data['password']);
+		// 		self::returnMsg(200,'OK',$data);
+		// 	} catch (Exception $e) {
+		// 		self::returnMsg(401,'插入失败',$e);
+		// 	}
+		// } else {
+		// 	self::returnMsg(200,'账号已存在');
+		// }
+	}
 	/////////////////////////////工具函数
+	
+
 
 	//参数验证
 	private static function checkData($data = [],$scene = 'student')

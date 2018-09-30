@@ -1,10 +1,10 @@
 <?php
 namespace app\api\controller\v1;
 
-use think\Request;
 use app\api\controller\Send;
 use app\api\controller\Oauth;
 use think\facade\Cache;
+use think\Request;
 use think\Db;
 /**
  * 生成token
@@ -39,28 +39,35 @@ class Token
 	{
 		//参数验证
 		$validate = new \app\api\validate\Token;
-		if(!$validate->check(input(''))){
+		$header = $request->header('');
+		$data = [
+			'appid' => $header['appid'],
+			'mobile' => $header['mobile'],
+			'passwd' => $header['passwd'],
+			'nonce' => $header['nonce'],
+			'timestamp' => $header['timestamp'],
+			'sign' => $header['sign']
+		];
+		
+		if(!$validate->check($data)){
 			return self::returnMsg(401,$validate->getError());
 		}
-		self::checkParams(input(''));  //参数校验
 
-		//数据库已经有一个用户,这里需要根据input('mobile')去数据库查找有没有这个用户
-		$res = Db::table('student')->where('mobile',input('mobile'))->find();
+		//参数校验
+		self::checkParams($data);
+
+		//用户校验
+		$res = Db::table('student')->where('mobile',$data['mobile'])->find();
 		if (empty($res)){
 			return self::returnMsg(500,'user does not exit');
-		}
-
-		//密码校验
-		if (input('passwd') !== $res['password']) {
+		} else if ($data['passwd'] !== $res['password']) {
 			return self::returnMsg(400, 'password not correct');
 		}
+		
+		$data['uid'] = $res['id'];
 
-		$userInfo = [
-			'uid'   => $res['id'],
-			'mobile'=> input('mobile')
-		];
 		try {
-			$accessToken = self::setAccessToken(array_merge($userInfo,input('')));  //传入参数应该是根据手机号查询改用户的数据
+			$accessToken = self::setAccessToken($data);  //传入参数应该是根据手机号查询改用户的数据
 			return self::returnMsg(200,'success',$accessToken);
 		} catch (Exception $e) {
 			return self::returnMsg(500,'fail',$e);
@@ -107,7 +114,6 @@ class Token
 	{	
 		//时间戳校验
 		if(abs($params['timestamp'] - time()) > self::$timeDif){
-
 			return self::returnMsg(401,'请求时间戳与服务器时间戳异常','timestamp：'.time());
 		}
 
@@ -121,7 +127,6 @@ class Token
 		if($sign !== $params['sign']){
 			return self::returnMsg(401,'sign错误','sign：'.$sign);
 		}
-
 	}
 
 	/**
@@ -139,7 +144,6 @@ class Token
 		//判断是否已存在当前用户的Token
 		$res = Db::table('token')->where('mobile',$clientInfo['mobile'])->find();
 		if (!empty($res)) {
-			
 			//获取令牌
 			$accessTokenInfo = [
 				'access_token' => $res['access_token'],
@@ -150,7 +154,7 @@ class Token
 		} else {
 			//生成令牌
 			$access_token = self::buildAccessToken();
-			$refresh_token = self::getRefreshToken($clientInfo['appid']);
+			$refresh_token = self::getRefreshToken();
 
 			$accessTokenInfo = [
 				'access_token'  => $access_token,//访问令牌
@@ -160,11 +164,10 @@ class Token
 			] + $clientInfo;
 
 			//保存本次token
-			self::saveAccessToken($access_token, $accessTokenInfo);
+			self::saveAccessToken($accessTokenInfo);
 		}
 
 		unset($accessTokenInfo['nonce'],$accessTokenInfo['passwd']);
-		// self::saveRefreshToken($refresh_token,$clientInfo['appid']);
 		return $accessTokenInfo;
 	}
 
@@ -194,7 +197,7 @@ class Token
 	 * @param $accessToken
 	 * @param $accessTokenInfo
 	 */
-	protected static function saveAccessToken($access_token, $accessTokenInfo)
+	protected static function saveAccessToken($accessTokenInfo)
 	{
 		//存储accessToken
 		try {
