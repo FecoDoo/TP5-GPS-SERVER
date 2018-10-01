@@ -6,7 +6,7 @@ use think\Validate;
 /**
  * 生成Register参数验证器
  */
-class Register extends Validate
+class Reg extends Validate
 {
 	
 	protected $rule = [

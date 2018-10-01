@@ -4,25 +4,24 @@ namespace app\api\controller\v1;
 
 use think\Controller;
 use think\Request;
+//use app\api\controller\Api;
 use app\api\controller\Send;
-use app\api\controller\Oauth;
 use think\Db;
 
-class Register
+class Reg
 {
 	use Send;
 
 	public function register(Request $request)
 	{
-		$data = input('');
-		$this->checkData($data);
+		$data = $request->header('');
+		self::checkData($data);
 
-		if (!$res) {
+		if (!$data['type']) {
 			self::student($data);
 		} else {
 			self::enterprise($data);
 		}
-		
 	}
 
 	//学生注册
@@ -32,7 +31,7 @@ class Register
 		if (empty($res)) {
 			try {
 				unset($data['type']);
-				$res = Db::table('student')->insert($data);
+				$res = Db::table('student')->strict(false)->insert($data);
 				unset($data['password']);
 				self::returnMsg(200,'OK',$data);
 			} catch (Exception $e) {
@@ -67,7 +66,7 @@ class Register
 	//参数验证
 	private static function checkData($data = [],$scene = 'student')
 	{	
-		$validate = new \app\api\validate\Register;
+		$validate = new \app\api\validate\Reg;
 		if(!$validate->check($data,'',$scene)){
 			return self::returnMsg(401,$validate->getError());
 		}

@@ -3,6 +3,7 @@ namespace app\api\controller\v1;
 use think\Controller;
 use think\Request;
 use app\api\controller\Api;
+
 class User extends Api
 {
 	/**

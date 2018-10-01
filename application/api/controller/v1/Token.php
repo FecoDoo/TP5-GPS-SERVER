@@ -3,7 +3,6 @@ namespace app\api\controller\v1;
 
 use app\api\controller\Send;
 use app\api\controller\Oauth;
-use think\facade\Cache;
 use think\Request;
 use think\Db;
 /**
