@@ -22,8 +22,6 @@ class Student extends Api
 		self::returnMsg(200,'OK',$this->clientInfo);
 	}
 
-	
-
 	/**
 	 * 显示学生信息
 	 *
@@ -54,14 +52,11 @@ class Student extends Api
 				
 				for ($i = 0;$i < count($res);$i++)
 				{
-					
 					$data[$i]['class'] = Db::table('class')->where('id',$res[$i]['cid'])->value('name');
 					$data[$i]['name'] =	$info['name'];
 					$data[$i]['school'] = $info['school'];
 					$data[$i]['score'] = $res[$i]['score'];
 					$data[$i]['progress'] = $res[$i]['progress'];
-
-					//unset($res[$i]['cid'],$res[$i]['sid']);
 				}
 			}
 			self::returnMsg(200,'OK',$data);
@@ -164,7 +159,7 @@ class Student extends Api
 		self::returnMsg(200,'OK',$data);
 	}
 
-	//////////////////////////////////工具函数
+	/*****************************工具函数*************************/
 	//参数验证
 	private static function checkData($data = [],$scene = '')
 	{	

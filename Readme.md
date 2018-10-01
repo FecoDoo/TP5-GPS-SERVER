@@ -2,7 +2,7 @@
 
 ## 目录结构
 
-[toc]
+[TOC]
 
 ---
 
@@ -13,19 +13,21 @@
 
 * header
     
-    | appid | mobile | passwd | nonce | timestamp | sign |
-    |-------|--------|--------|-------|-----------|------|
-    | gps | 15968158372 | 123456 | 124134124 | 时间戳 | MD5签名 |
+    |token|
+    |----------|
+    |在authorization字段中加入,例如"token dawfawewrqrqwrqwtwqf"|
 
 * POST参数
 
-    NULL
+    | appid | mobile | passwd | nonce | timestamp | sign |
+    |-----------|-------------|---------------|------------|--------------------|--------|
+    | gps | 15968158372 | 123456 | 124134124 | 时间戳 | MD5签名 |
 
 * 返回数据参考
 ```json
 {
     "code": 200,
-    "message": "success",
+    "message": "OK",
     "data": {
         "access_token": "o81xa76qtv5GFC4cOTyEIL2u1MSmgY4X",
         "expires_time": 1540629689,
@@ -33,8 +35,8 @@
         "refresh_expires_time": 1540629689,
         "appid": "gps",
         "mobile": "15968158372",
-        "timestamp": "1538280098",
-        "sign": "829aa47ee1bd8132ebc06e5c8637f143",
+        "timestamp": "1538407231",
+        "sign": "f0cf14cd122744e7163da703c1d521f3",
         "uid": 4
     }
 }
@@ -44,9 +46,13 @@
 
 ## 注册模块
 * url(POST)
+
     http://47.106.64.85/v1/register
+
 * header
+
     NULL
+    
 * post参数
     
     |mobile|password|name|username|sex|address|idcard|email|education|school|major|practice|hobby|speciality|honor|type|
@@ -87,9 +93,9 @@
   http://47.106.64.85/v1/student/info
 * header
 
-  | uid  | appid | access_token |
-  | ---- | ----- | ------------ |
-  | int  | int   | string       |
+    |access_token|
+    |-|
+    |string|
 
 * post参数
 
@@ -126,9 +132,9 @@
   http://47.106.64.85/v1/student/update
 * header
 
-  | uid  | appid | access_token |
-  | ---- | ----- | ------------ |
-  | int  | int   | string       |
+  | access_token |
+  | ---- |
+  | string |
 
 * post参数
 
@@ -153,9 +159,9 @@
   http://47.106.64.85/v1/student/classScore
 * header
 
-  | uid  | appid | access_token |
-  | ---- | ----- | ------------ |
-  | int  | int   | string       |
+  | access_token |
+  | ------------ |
+  | string |
 
 * post参数
 
@@ -190,9 +196,9 @@
   http://47.106.64.85/v1/student/classInfo
 * header
 
-  | uid  | appid | access_token |
-  | ---- | ----- | ------------ |
-  | int  | int   | string       |
+  | access_token |
+  | ---- |
+  | string|
 
 * post参数
 
@@ -243,9 +249,9 @@
   http://47.106.64.85/v1/student/changeClass
 * header
 
-  | uid  | appid | access_token |
-  | ---- | ----- | ------------ |
-  | int  | int   | string       |
+  | access_token |
+  | ---- |
+  | string|
 
 * post参数
 

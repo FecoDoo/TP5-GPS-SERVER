@@ -48,16 +48,14 @@ class Oauth
 	{   
 		//获取头部信息
 		try {
-			// $authorization = Request::header('authentication');   //tp5.1Facade调用 获取头部字段
-			// $authorization = explode(" ", $authorization);  //authorization：USERID xxxx
-			// $authorizationInfo  = explode(":", base64_decode($authorization[1]));
-			// $clientInfo['uid'] = $authorizationInfo[2];
-			// $clientInfo['appid'] = $authorizationInfo[0];
-			// $clientInfo['access_token'] = $authorizationInfo[1];
-			$authorization = Request::header('');
-			$clientInfo['uid'] = $authorization['uid'];
-			$clientInfo['appid'] = $authorization['appid'];
-			$clientInfo['access_token'] = $authorization['access_token'];
+			//获取头部字段
+			$authorization = Request::header('authorization');
+			$authorization = explode(" ", $authorization);
+			$res = Db::table('token')->where('access_token',$authorization[1])->find();
+
+			$clientInfo['uid'] = $res['uid'];
+			$clientInfo['appid'] = $res['appid'];
+			$clientInfo['access_token'] = $authorization[1];
 			return $clientInfo;
 		} catch (Exception $e) {
 			return self::returnMsg(401,'Invalid authorization credentials',Request::header(''));
@@ -74,13 +72,13 @@ class Oauth
 		$getAccessToken = Db::table('token')->where('uid', $data['uid'])->find(); 
 
 		if(empty($getAccessToken)){
-			return self::returnMsg(401,'fail','数据库中无当前登录信息，请重新登陆');
+			return self::returnMsg(401,'Fail','数据库中无当前登录信息，请重新登陆');
 		}
 		if($getAccessToken['appid'] !== $data['appid']){
-			return self::returnMsg(401,'fail',"appid错误");  //appid与数据库中的appid不匹配
+			return self::returnMsg(401,'Fail',"appid错误");  //appid与数据库中的appid不匹配
 		}
 		if($getAccessToken['access_token'] !== $data['access_token']){
-			return self::returnMsg(401,'fail','access_token不存在或为空');  //uid与数据库中的uid不匹配
+			return self::returnMsg(401,'Fail','access_token不存在或为空');  //uid与数据库中的uid不匹配
 		}
 		return $data;
 	}

@@ -36,47 +36,57 @@ class Token
 	 */
 	public function token(Request $request)
 	{
-		//参数验证
-		$validate = new \app\api\validate\Token;
-		$header = $request->header('');
+		if($request->isOptions()){
+			return self::returnMsg(200,'OK');
+		}
+		// 获取内容
+		$body = input('');
 		$data = [
-			'appid' => $header['appid'],
-			'mobile' => $header['mobile'],
-			'passwd' => $header['passwd'],
-			'nonce' => $header['nonce'],
-			'timestamp' => $header['timestamp'],
-			'sign' => $header['sign']
+			'appid' => $body['appid'],
+			'mobile' => $body['mobile'],
+			'passwd' => $body['passwd'],
+			'nonce' => $body['nonce'],
+			'timestamp' => $body['timestamp'],
+			'sign' => $body['sign']
 		];
 		
-		if(!$validate->check($data)){
-			return self::returnMsg(401,$validate->getError());
-		}
-
 		//参数校验
 		self::checkParams($data);
 
 		//用户校验
+		$data = self::checkUser($data);
+
+		try {
+			$accessToken = self::setAccessToken($data);
+			return self::returnMsg(200,'OK',$accessToken);
+		} catch (Exception $e) {
+			return self::returnMsg(500,'Fail',$e);
+		}
+	}
+
+
+	/********************工具函数*****************/
+
+	/**
+	 * 验证用户
+	 */
+	protected function checkUser($data = [])
+	{
 		$res = Db::table('student')->where('mobile',$data['mobile'])->find();
 		if (empty($res)){
 			return self::returnMsg(500,'user does not exit');
 		} else if ($data['passwd'] !== $res['password']) {
 			return self::returnMsg(400, 'password not correct');
-		}
-		
-		$data['uid'] = $res['id'];
-
-		try {
-			$accessToken = self::setAccessToken($data);  //传入参数应该是根据手机号查询改用户的数据
-			return self::returnMsg(200,'success',$accessToken);
-		} catch (Exception $e) {
-			return self::returnMsg(500,'fail',$e);
+		} else {
+			$data['uid'] = $res['id'];
+			return $data;
 		}
 	}
 
 	/**
 	 * 刷新token
 	 */
-	public function refresh($refresh_token='',$appid = '')
+	protected function refresh($refresh_token='',$appid = '')
 	{
 		//查看刷新token是否存在
 		// $cache_refresh_token = Cache::get(self::$refreshAccessTokenPrefix.$appid);
@@ -90,18 +100,18 @@ class Token
 				$refresh_token_exist = 0;
 			}
 		} catch (Exception $e) {
-			return self::returnMsg(500,'fail',$e);
+			return self::returnMsg(500,'Fail',$e);
 		}
 
 		if($refresh_token_exist){
-			return self::returnMsg(401,'fail','refresh_token is null');
+			return self::returnMsg(401,'Fail','refresh_token is null');
 		}else{
 			if($db_refresh_token !== $refresh_token){
-				return self::returnMsg(401,'fail','refresh_token is error');
+				return self::returnMsg(401,'Fail','refresh_token is error');
 			}else{    //重新给用户生成调用token
 				$data['appid'] = $appid;
 				$accessToken = self::setAccessToken($data); 
-				return self::returnMsg(200,'success',$accessToken);
+				return self::returnMsg(200,'OK',$accessToken);
 			}
 		}
 	}
@@ -109,18 +119,21 @@ class Token
 	/**
 	 * 参数检测
 	 */
-	public static function checkParams($params = [])
-	{	
+	protected static function checkParams($params = [])
+	{
+		//参数校验
+		$validate = new \app\api\validate\Token;
+		if(!$validate->check($params)){
+			return self::returnMsg(401,$validate->getError());
+		}
 		//时间戳校验
 		if(abs($params['timestamp'] - time()) > self::$timeDif){
 			return self::returnMsg(401,'请求时间戳与服务器时间戳异常','timestamp：'.time());
 		}
-
-		//appid检测，这里是在本地进行测试，正式的应该是查找数据库或者redis进行验证
+		//appid检测
 		if($params['appid'] !== self::$appid){
 			return self::returnMsg(401,'appid 错误');
 		}
-
 		//签名检测
 		$sign = Oauth::makeSign($params,self::$appsercet);
 		if($sign !== $params['sign']){
@@ -173,7 +186,7 @@ class Token
 	/**
 	 * 刷新用的token检测是否还有效
 	 */
-	public static function getRefreshToken($appid = '')
+	protected static function getRefreshToken($appid = '')
 	{
 		return self::buildAccessToken();
 		// return Cache::get(self::$refreshAccessTokenPrefix.$appid) ? Cache::get(self::$refreshAccessTokenPrefix.$appid) : self::buildAccessToken(); 
@@ -203,7 +216,7 @@ class Token
 			Db::table('token')->strict(false)->insert($accessTokenInfo);
 			// cache(self::$accessTokenPrefix . $accessToken, $accessTokenInfo, self::$expires);
 		} catch (Exception $e) {
-			return self::returnMsg(500, 'fail', $e);
+			return self::returnMsg(500, 'Fail', $e);
 		}
 	}
 

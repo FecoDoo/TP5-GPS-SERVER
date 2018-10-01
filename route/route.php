@@ -11,33 +11,22 @@
 
 //一般路由规则
 //注册
-Route::post('v1/register','api/v1.reg/register')
-	->header('Access-Control-Allow-Origin','*')
-	->header('Access-Control-Allow-Headers', 'Authorization, Content-Type, If-Match, If-Modified-Sinc
-e, If-None-Match, If-Unmodified-Since, X-Requested-With, mobile, password, name, username, sex, address, idcard, email, education, school, major, practice, hobby, speciality, honor, type')
-	->allowCrossDomain();
+Route::post('v1/register','api/v1.reg/register')->allowCrossDomain(true);
 //学生
-Route::get('v1/student/index','api/v1.student/index');
-Route::get('v1/student/info','api/v1.student/info');
-Route::put('v1/student/update','api/v1.student/update')->allowCrossDomain();
-Route::put('v1/student/changeClass','api/v1.student/changeClass')->allowCrossDomain();
-Route::get('v1/student/classInfo','api/v1.student/classInfo');
-Route::get('v1/student/classScore','api/v1.student/classScore');
+Route::get('v1/student/index','api/v1.student/index')->allowCrossDomain(true);
+Route::get('v1/student/info','api/v1.student/info')->allowCrossDomain(true);
+Route::put('v1/student/update','api/v1.student/update')->allowCrossDomain(true);
+Route::put('v1/student/changeClass','api/v1.student/changeClass')->allowCrossDomain(true);
+Route::get('v1/student/classInfo','api/v1.student/classInfo')->allowCrossDomain(true);
+Route::get('v1/student/classScore','api/v1.student/classScore')->allowCrossDomain(true);
 
 //班级
-Route::get('v1/class/index','api/v1.clas/index');
-Route::get('v1/class/info','api/v1.clas/info');
-Route::put('v1/class/update','api/v1.clas/update')->allowCrossDomain();
-//资源路由
-// Route::resource(':version/user','api/:version.user')->except(['index', 'delete']);
-// Route::resource(':version/student','api/:version.student')->except(['delete']);
+Route::get('v1/class/index','api/v1.clas/index')->allowCrossDomain(true);
+Route::get('v1/class/info','api/v1.clas/info')->allowCrossDomain(true);
+Route::put('v1/class/update','api/v1.clas/update')->allowCrossDomain(true);
 
 //生成access_token
-Route::post(':version/token','api/:version.token/token')
-	->header('Access-Control-Allow-Origin','*')
-	->header('Access-Control-Allow-Headers', 'Authorization, Content-Type, If-Match, If-Modified-Sinc
-e, If-None-Match, If-Unmodified-Since, X-Requested-With, nonce, appid , mobile , passwd , nonce , timestamp , sign')
-	->allowCrossDomain();
+Route::post(':version/token','api/:version.token/token')->allowCrossDomain(true);
 
 //测试路由
 Route::get('index','index/index/index');
