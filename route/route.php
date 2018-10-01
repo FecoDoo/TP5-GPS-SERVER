@@ -11,7 +11,11 @@
 
 //一般路由规则
 //注册
-Route::post('v1/register','api/v1.reg/register')->allowCrossDomain();
+Route::post('v1/register','api/v1.reg/register')
+	->header('Access-Control-Allow-Origin','*')
+	->header('Access-Control-Allow-Headers', 'Authorization, Content-Type, If-Match, If-Modified-Sinc
+e, If-None-Match, If-Unmodified-Since, X-Requested-With, mobile, password, name, username, sex, address, idcard, email, education, school, major, practice, hobby, speciality, honor, type')
+	->allowCrossDomain();
 //学生
 Route::get('v1/student/index','api/v1.student/index');
 Route::get('v1/student/info','api/v1.student/info');
@@ -29,7 +33,11 @@ Route::put('v1/class/update','api/v1.clas/update')->allowCrossDomain();
 // Route::resource(':version/student','api/:version.student')->except(['delete']);
 
 //生成access_token
-Route::post(':version/token','api/:version.token/token')->allowCrossDomain();
+Route::post(':version/token','api/:version.token/token')
+	->header('Access-Control-Allow-Origin','*')
+	->header('Access-Control-Allow-Headers', 'Authorization, Content-Type, If-Match, If-Modified-Sinc
+e, If-None-Match, If-Unmodified-Since, X-Requested-With, nonce, appid , mobile , passwd , nonce , timestamp , sign')
+	->allowCrossDomain();
 
 //测试路由
 Route::get('index','index/index/index');
