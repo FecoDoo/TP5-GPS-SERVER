@@ -89,7 +89,7 @@ class Oauth
 	 */
 	public static function makeSign ($data = [],$app_secret = '')
 	{   
-		// unset($data['version']);
+		unset($data['version']);
 		unset($data['sign']);
 		$md5 = self::_getOrderMd5($data,$app_secret);
 		return $md5;
@@ -101,7 +101,6 @@ class Oauth
 	private static function _getOrderMd5($params = [] , $app_secret = '') {
 		ksort($params);
 		$params['key'] = $app_secret;
-
 		return strtolower(md5(urldecode(http_build_query($params))));
 	}
 

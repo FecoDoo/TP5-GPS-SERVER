@@ -11,22 +11,22 @@
 
 //一般路由规则
 //注册
-Route::post('v1/register','api/v1.reg/register')->allowCrossDomain(true);
+Route::post('v1/register','api/v1.reg/register')->allowCrossDomain();
 //学生
-Route::get('v1/student/index','api/v1.student/index')->allowCrossDomain(true);
-Route::get('v1/student/info','api/v1.student/info')->allowCrossDomain(true);
-Route::put('v1/student/update','api/v1.student/update')->allowCrossDomain(true);
-Route::put('v1/student/changeClass','api/v1.student/changeClass')->allowCrossDomain(true);
-Route::get('v1/student/classInfo','api/v1.student/classInfo')->allowCrossDomain(true);
-Route::get('v1/student/classScore','api/v1.student/classScore')->allowCrossDomain(true);
+Route::get('v1/student/index','api/v1.student/index')->allowCrossDomain();
+Route::get('v1/student/info','api/v1.student/info')->allowCrossDomain();
+Route::put('v1/student/update','api/v1.student/update')->allowCrossDomain();
+Route::put('v1/student/changeClass','api/v1.student/changeClass')->allowCrossDomain();
+Route::get('v1/student/classInfo','api/v1.student/classInfo')->allowCrossDomain();
+Route::get('v1/student/classScore','api/v1.student/classScore')->allowCrossDomain();
 
 //班级
-Route::get('v1/class/index','api/v1.clas/index')->allowCrossDomain(true);
-Route::get('v1/class/info','api/v1.clas/info')->allowCrossDomain(true);
-Route::put('v1/class/update','api/v1.clas/update')->allowCrossDomain(true);
+Route::get('v1/class/index','api/v1.clas/index')->allowCrossDomain();
+Route::get('v1/class/info','api/v1.clas/info')->allowCrossDomain();
+Route::put('v1/class/update','api/v1.clas/update')->allowCrossDomain();
 
 //生成access_token
-Route::post(':version/token','api/:version.token/token')->allowCrossDomain(true);
+Route::post(':version/token','api/:version.token/token')->allowCrossDomain();
 
 //测试路由
 Route::get('index','index/index/index');

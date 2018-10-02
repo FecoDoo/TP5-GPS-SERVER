@@ -14,7 +14,7 @@ class Reg
 
 	public function register(Request $request)
 	{
-		$data = $request->header('');
+		$data = input('');
 		self::checkData($data);
 
 		if (!$data['type']) {

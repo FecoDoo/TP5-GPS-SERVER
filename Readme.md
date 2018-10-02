@@ -30,13 +30,7 @@
     "message": "OK",
     "data": {
         "access_token": "o81xa76qtv5GFC4cOTyEIL2u1MSmgY4X",
-        "expires_time": 1540629689,
         "refresh_token": "v34wH3ZWt26aY8ogkMCiF1cRAsGBeQbd",
-        "refresh_expires_time": 1540629689,
-        "appid": "gps",
-        "mobile": "15968158372",
-        "timestamp": "1538407231",
-        "sign": "f0cf14cd122744e7163da703c1d521f3",
         "uid": 4
     }
 }
@@ -65,22 +59,12 @@
     "code": 200,
     "message": "OK",
     "data": {
-        "username": "ac", //昵称
-        "name": "ac", //姓名
-        "sex": "男",
-        "address": "hz",
-        "birthday": "2018-09-19",
-        "idcard": "33018419960207864",
-        "email": "fecodoo@aliyun.com",
-        "photo": null,
-        "mobile": "13588888888",
-        "education": "bachelor", //教育背景
-        "school": "ZJUT",
-        "major": "EE", //专业
-        "practice": null, //实习经历
-        "hobby": "Game",
-        "speciality": "Nothing", //特长
-        "honor": "校会主席" //荣誉
+        "mobile": "18958041798",
+        "name": "KK",
+        "sex": "f",
+        "email": "weqrq@aliyun.com",
+        "school": "ZUT",
+        "username": "hh"
     }
 }
 ```
