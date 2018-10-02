@@ -36,11 +36,12 @@ class Token
 	 */
 	public function token(Request $request)
 	{
-		if($request->isOptions()){
-			return self::returnMsg(200,'OK');
-		}
 		// 获取内容
 		$body = input('');
+
+		//参数校验
+		self::checkParams($body);
+
 		$data = [
 			'appid' => $body['appid'],
 			'mobile' => $body['mobile'],
@@ -49,9 +50,6 @@ class Token
 			'timestamp' => $body['timestamp'],
 			'sign' => $body['sign']
 		];
-		
-		//参数校验
-		self::checkParams($data);
 
 		//用户校验
 		$data = self::checkUser($data);
@@ -159,9 +157,7 @@ class Token
 			//获取令牌
 			$accessTokenInfo = [
 				'access_token' => $res['access_token'],
-				'expires_time' => $res['expires_time'],
 				'refresh_token' => $res['refresh_token'],
-				'refresh_expires_time' => $res['refresh_expires_time'],
 			] + $clientInfo;
 		} else {
 			//生成令牌
@@ -179,7 +175,7 @@ class Token
 			self::saveAccessToken($accessTokenInfo);
 		}
 
-		unset($accessTokenInfo['nonce'],$accessTokenInfo['passwd']);
+		unset($accessTokenInfo['nonce'],$accessTokenInfo['passwd'],$accessTokenInfo['appid'],$accessTokenInfo['mobile'],$accessTokenInfo['timestamp'],$accessTokenInfo['sign'],$accessTokenInfo['expires_time'],$accessTokenInfo['refresh_expires_time']);
 		return $accessTokenInfo;
 	}
 
@@ -214,6 +210,7 @@ class Token
 		//存储accessToken
 		try {
 			Db::table('token')->strict(false)->insert($accessTokenInfo);
+			return;
 			// cache(self::$accessTokenPrefix . $accessToken, $accessTokenInfo, self::$expires);
 		} catch (Exception $e) {
 			return self::returnMsg(500, 'Fail', $e);
