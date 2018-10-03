@@ -12,10 +12,8 @@
     http://47.106.64.85/v1/token
 
 * header
-    
-    |token|
-    |----------|
-    |在authorization字段中加入,例如"token dawfawewrqrqwrqwtwqf"|
+
+NULL
 
 * POST参数
 
@@ -73,13 +71,13 @@
 ## 学生模块
 
 ### 获取学生信息
-* url(POST)
+* url(GET)
   http://47.106.64.85/v1/student/info
 * header
 
-    |access_token|
-    |-|
-    |string|
+    | access_token |
+  | ---- |
+  | string (Oauth 2.0)|
 
 * post参数
 
@@ -112,13 +110,13 @@
 ```
 
 ### 更改学生信息
-* url(POST)
+* url(PUT)
   http://47.106.64.85/v1/student/update
 * header
 
   | access_token |
   | ---- |
-  | string |
+  | string (Oauth 2.0)|
 
 * post参数
 
@@ -139,13 +137,13 @@
 ```
 
 ### 获取已加入的班级内课程成绩
-* url(POST)
+* url(GET)
   http://47.106.64.85/v1/student/classScore
 * header
 
   | access_token |
-  | ------------ |
-  | string |
+  | ---- |
+  | string (Oauth 2.0)|
 
 * post参数
 
@@ -176,13 +174,13 @@
 ```
 
 ### 获取已加入班级及课程信息
-* url(POST)
+* url(GET)
   http://47.106.64.85/v1/student/classInfo
 * header
 
   | access_token |
   | ---- |
-  | string|
+  | string (Oauth 2.0)|
 
 * post参数
 
@@ -229,13 +227,13 @@
 ```
 
 ### 更改班级
-* url(POST)
+* url(PUT)
   http://47.106.64.85/v1/student/changeClass
 * header
 
   | access_token |
   | ---- |
-  | string|
+  | string (Oauth 2.0)|
 
 * post参数
 
@@ -272,3 +270,4 @@
 
 -  客户端获取浏览器中COOKIE，若无COOKIE则调用http://47.106.64.85/v1/token接口获取token
 -  访问相应的url，例如：http://47.106.64.85/v1/student/info
+- Token使用了Oauth 2.0协议,请将Token字符串前加上Bearer+空格,放入请求头部authorization字段中
