@@ -1,33 +1,33 @@
 <?php
-
 namespace app\api\validate;
 
 use think\Validate;
 /**
- * 生成Register参数验证器
+ * 生成Student参数验证器
  */
-class Reg extends Validate
+class Enterprise extends Validate
 {
 	
 	protected $rule = [
-        'mobile'    =>  'require|mobile|max:13',
-        'password'    =>  'require|max:12',
-        'name'  =>  'require|max:12',
-        'username' => 'require|max:12',
-        'sex'   =>  'require|max:2',
-        'birthday' => 'require|date'
+        'mobile'    =>  'mobile|max:13',
+        'password'    =>  'max:12',
+        'name'  =>  'max:12',
+        'username' => 'max:12',
+        'sex'   =>  'max:2',
         'address'   =>  'max:50',
         'idcard'    => 'max:18',
-        'email' => 'require|email|max:50',
+        'email' => 'email|max:50',
         'education' => 'max:12',
-        'school'    => 'require|max:12',
+        'school'    => 'max:12',
         'major' => 'max:20',
         'practice'  => 'max:50',
         'hobby' => 'max:20',
         'speciality'    => 'max:50',
         'honor' => 'max:50',
-
+        'birthday' => 'date',
         'type' => 'boolean|require',
+        'cid' => 'require|max:12',
+        'photo' => 'image',
     ];
 
     protected $message  =   [
@@ -36,7 +36,6 @@ class Reg extends Validate
         'password.max'    => '密码最大长度为12',
         'name.max' => '姓名最大长度12',
         'username.max' => '昵称最大长度12',
-        'username.require' => '昵称不能为空',
         'sex.max' => '性别长度为2',
         'address.max'     => '地址长度为50',
         'idcard.max'   => '身份证长度18',
@@ -49,11 +48,16 @@ class Reg extends Validate
         'speciality.max'=>'特长最大长度50',
         'honor.max'=>'所获荣誉最大长度50',
         'type.require'=>'需要操作类型',
+        'cid.max'=>'课程ID最大12',
+        'cid.require'=>'需要课程id',
+        'birthday.date' => '日期格式错误',
+        'photo.image' => '照片格式错误', 
     ];
 
     protected $scene = [
-        'student' => ['mobile','password','name','sex','birthday','address','idcard','email','education','school','major','practice','hobby','speciality','type','honor'],
-        'enterprise' => [],
-
+        'update' => ['mobile','username','password','name','sex','photo','birthday','address','idcard','email','education','school','major','practice','hobby','speciality','honor'],
+        'class' => ['type','cid'],
+        'classInfo' => ['cid'],
     ];
 }
+

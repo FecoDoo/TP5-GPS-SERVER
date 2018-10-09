@@ -135,6 +135,35 @@ NULL
     }
 }
 ```
+### 上传学生头像
+* url(GET)
+  http://47.106.64.85/v1/student/getPortraitOss
+* header
+    
+  | access_token |
+  | ---- |
+  | string (Oauth 2.0)|
+
+* post参数
+
+    NULL
+
+* 返回数据参考:
+```json
+{
+    "code": 200,
+    "message": "OK",
+    "data": {
+        "accessid": "LTAIergYt01cBfX1",
+        "host": "http://gps-server.oss-cn-shenzhen.aliyuncs.com",
+        "policy": "eyJleHBpcmF0aW9uIjoiMjAxOC0xMC0wOSAxNToyODozOSIsImNvbmRpdGlvbnMiOlt7ImNvbnRlbnQtbGVuZ3RoLXJhbmdlIjoiMC0xMDQ4NTc2MDAwIn0seyJzdGFydHMtd2l0aCI6InBvcnRyYWl0XyJ9XX0=",
+        "signature": "jH8OzKngedOQ50XSpDa5hShWg7k=",
+        "expire": "2018-10-09 15:28:39",
+        "callback": "eyJjYWxsYmFja1VybCI6Imh0dHA6XC9cLzQ3LjEwNi42NC44NVwvdjFcL3N0dWRlbnRcL2dldFBvcnRyYWl0Q2FsbGJhY2siLCJjYWxsYmFja0JvZHkiOiJmaWxlbmFtZT0ke29iamVjdH0mc2l6ZT0ke3NpemV9Jm1pbWVUeXBlPSR7bWltZVR5cGV9JmhlaWdodD0ke2ltYWdlSW5mby5oZWlnaHR9JndpZHRoPSR7aW1hZ2VJbmZvLndpZHRofSIsImNhbGxiYWNrQm9keVR5cGUiOiJhcHBsaWNhdGlvblwveC13d3ctZm9ybS11cmxlbmNvZGVkIn0=",
+        "dir": "image/"
+    }
+}
+```
 
 ### 获取已加入的班级内课程成绩
 * url(GET)

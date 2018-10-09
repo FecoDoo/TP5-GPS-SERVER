@@ -20,28 +20,28 @@ trait Oss
 		
 		$callback_param = [
 			'callbackUrl'=>$callbackUrl, 
-			'callbackBody'=>'filename=$id&size=${size}&mimeType=${mimeType}&height=${imageInfo.height}&width=${imageInfo.width}',
+			'callbackBody'=>'filename=${object}&size=${size}&mimeType=${mimeType}&height=${imageInfo.height}&width=${imageInfo.width}',
 			'callbackBodyType'=>"application/x-www-form-urlencoded"
 		];
-		$callback_string = json_encode($callback_param);
-
-		$base64_callback_body = base64_encode($callback_string);
-		$expire = 60;  //设置该policy超时时间是10s. 即这个policy过了这个有效时间，将不能访问。
+		$base64_callback_body = base64_encode(json_encode($callback_param));
+		//设置该policy超时时间
+		$expire = 600;
 		$expiration = date("Y-m-d H:i:s" ,time()+$expire);
 
 		$conditions = [
-			'content-length-range'=>'0-1048576000',
-			'starts-with' => $dir
+			['content-length-range'=>'0-1048576000'],
+			['starts-with' => $dir]
 		];
 
 		$arr = [
 			'expiration'=> $expiration,
 			'conditions'=> $conditions
 		];
+		
 		$policy = json_encode($arr);
 
 		$base64_policy = base64_encode($policy);
-		$signature = base64_encode(hash_hmac('sha1', $base64_policy, self::$key, true));
+		$signature = base64_encode(hash('sha1', $base64_policy, self::$key));
 
 		$response = [
 			'accessid' => self::$id,
@@ -50,15 +50,16 @@ trait Oss
 			'signature' => $signature,
 			'expire' => $expiration,
 			'callback' => $base64_callback_body,
+			'dir' => 'image/'
 		];
 		return $response;
 	}
 
-	public function PortraitCallback(Request $r)
+	public function PortraitCallback()
 	{
 		// 1.获取OSS的签名header和公钥url header
-		$authorizationBase64 = "";
-		$pubKeyUrlBase64 = "";
+		$authorizationBase64 = '';
+		$pubKeyUrlBase64 = '';
 		/*
 		 * 注意：如果要使用HTTP_AUTHORIZATION头，你需要先在apache或者nginx中设置rewrite，以apache为例，修改
 		 * 配置文件/etc/httpd/conf/httpd.conf(以你的apache安装路径为准)，在DirectoryIndex index.php这行下面增加以下两行
@@ -118,7 +119,7 @@ trait Oss
 		{
 			header("Content-Type: application/json");
 			$data = array("Status"=>"Ok");
-			return json_encode($data);
+			echo json_encode($data);
 		}
 		else
 		{

@@ -12,27 +12,27 @@
 return [
     // 本地数据库
     // 数据库类型
-    // 'type'            => 'mysql',
-    // // 服务器地址
-    // 'hostname'        => 'localhost',
-    // // 数据库名
-    // 'database'        => 'gps',
-    // // 用户名
-    // 'username'        => 'root',
-    // // 密码
-    // 'password'        => 'root',
-
-    //远程数据库
-    // 数据库类型
     'type'            => 'mysql',
     // 服务器地址
-    'hostname'        => '47.106.64.85',
+    'hostname'        => 'localhost',
     // 数据库名
     'database'        => 'gps',
     // 用户名
-    'username'        => 'gps',
+    'username'        => 'root',
     // 密码
-    'password'        => '123456',
+    'password'        => 'root',
+
+    // //远程数据库
+    // // 数据库类型
+    // 'type'            => 'mysql',
+    // // 服务器地址
+    // 'hostname'        => '47.106.64.85',
+    // // 数据库名
+    // 'database'        => 'gps',
+    // // 用户名
+    // 'username'        => 'gps',
+    // // 密码
+    // 'password'        => '123456',
 
 
     // 端口

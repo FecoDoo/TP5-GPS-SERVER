@@ -38,7 +38,7 @@ class Clas extends Api
 		}
 	}
 
-	/////////////////////////////工具函数
+	/* 工具函数 */
 
 	//参数验证
 	private static function checkData($data = [],$scene = 'info')
