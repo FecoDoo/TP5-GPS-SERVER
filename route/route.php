@@ -20,6 +20,9 @@ Route::put('v1/student/changeClass','api/v1.student/changeClass')->allowCrossDom
 Route::get('v1/student/classInfo','api/v1.student/classInfo')->allowCrossDomain();
 Route::get('v1/student/classScore','api/v1.student/classScore')->allowCrossDomain();
 
+Route::get('v1/student/getPortraitCallback','api/v1.student/getPortraitCallback');
+Route::get('v1/student/getPortraitOss','api/v1.student/getPortraitOss');
+
 //班级
 Route::get('v1/class/index','api/v1.clas/index')->allowCrossDomain();
 Route::get('v1/class/info','api/v1.clas/info')->allowCrossDomain();

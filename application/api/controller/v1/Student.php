@@ -6,11 +6,13 @@ use think\Controller;
 use think\Request;
 use app\api\controller\Api;
 use app\api\controller\Send;
+use app\api\controller\Oss;
 use think\Db;
 
 class Student extends Api
 {
 	use Send;
+	use Oss;
 
 	/**
 	 * 显示资源列表
@@ -37,6 +39,19 @@ class Student extends Api
 			unset($res['password'],$res['id']);
 			self::returnMsg(200,'OK',$res);
 		}
+	}
+
+	public function getPortraitCallback()
+	{
+		$res = self::PortraitCallback();
+		self::returnMsg(200,'OK',$res);
+	}
+
+	public function getPortraitOss()
+	{
+		$id = Db::table('token')->where('access_token',$this->clientInfo['access_token'])->value('uid');
+		$res = self::PortraitOss($id);
+		self::returnMsg(200,'OK',$res);
 	}
 
 	public function classScore()
