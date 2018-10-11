@@ -3,11 +3,14 @@ namespace app\api\controller;
 
 use think\Controller;
 use think\Request;
+use think\Db;
 
 trait Oss
 {
-	private static $id='LTAIergYt01cBfX1';
-	private static $key='FZQl7b3v7iuYF9KSOcrvTqThUOVmOz';
+
+	private static $oss = [];
+	private static $id = '';
+	private static $key='';
 
 	public function PortraitOss($id)
 	{
@@ -33,12 +36,12 @@ trait Oss
 			['starts-with' => $dir]
 		];
 
-		$arr = [
-			'expiration'=> $expiration,
-			'conditions'=> $conditions
-		];
+		// $arr = [
+		// 	'expiration'=> $expiration,
+		// 	'conditions'=> $conditions
+		// ];
 		
-		$policy = json_encode($arr);
+		$policy = json_encode($conditions);
 
 		$base64_policy = base64_encode($policy);
 		$signature = base64_encode(hash('sha1', $base64_policy, self::$key));
@@ -93,7 +96,7 @@ trait Oss
 		$pubKey = curl_exec($ch);
 		if ($pubKey == "")
 		{
-			//header("http/1.1 403 Forbidden");
+			header("http/1.1 403 Forbidden");
 			exit();
 		}
 
@@ -123,7 +126,7 @@ trait Oss
 		}
 		else
 		{
-			//header("http/1.1 403 Forbidden");
+			header("http/1.1 403 Forbidden");
 			exit();
 		}
 	}

@@ -13,7 +13,16 @@ class Student extends Api
 {
 	use Send;
 	use Oss;
+	private static $oss = [];
+	private static $id = '';
+	private static $key = '';
 
+	public function __construct()
+	{
+		self::$oss = Db::table('oss')->where('title','portrait')->find();
+		self::$id = self::$oss['id'];
+		self::$key = self::$oss['secret'];
+	}
 	/**
 	 * 显示资源列表
 	 *
@@ -21,7 +30,7 @@ class Student extends Api
 	 */
 	public function index()
 	{
-		self::returnMsg(200,'OK',$this->clientInfo);
+		self::returnMsg(200,'OK');
 	}
 
 	/**
@@ -43,13 +52,16 @@ class Student extends Api
 
 	public function getPortraitCallback()
 	{
-		self::PortraitCallback();
+		$res = self::PortraitCallback();
+		self::serverCallback('GPS_Portrait_OSS_Callback','OK');
+		self::returnMsg(200,'OK',json_decode($res));
 	}
 
 	public function getPortraitOss()
 	{
 		$id = Db::table('token')->where('access_token',$this->clientInfo['access_token'])->value('uid');
 		$res = self::PortraitOss($id);
+		self::serverCallback('GPS_Portrait_OSS_Request','OK');
 		self::returnMsg(200,'OK',$res);
 	}
 
@@ -181,5 +193,25 @@ class Student extends Api
 		if(!$validate->check($data,[],'update')){
 			return self::returnMsg(401,$validate->getError());
 		}
+	}
+
+	private static function serverCallback($text , $desp = '' , $key = 'SCU4201T3d8c4384e3a9e4f94e46e13b34217344583e5096d3fe6')
+	{
+		$postdata = http_build_query(
+			array(
+				'text' => $text,
+				'desp' => $desp
+			)
+		);
+
+		$opts = array('http' =>
+			array(
+				'method'  => 'POST',
+				'header'  => 'Content-type: application/x-www-form-urlencoded',
+				'content' => $postdata
+			)
+		);
+		$context  = stream_context_create($opts);
+		return $result = json_decode(file_get_contents('https://sc.ftqq.com/'.$key.'.send', false, $context));
 	}
 }
