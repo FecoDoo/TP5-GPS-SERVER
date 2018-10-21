@@ -8,7 +8,7 @@
 
 ## Token
 * url(POST)
-    
+  
     http://47.106.64.85/v1/token
 
 * header
@@ -46,7 +46,7 @@ NULL
     NULL
     
 * post参数
-    
+  
     |mobile|password|name|username|sex|address|idcard|email|education|school|major|practice|hobby|speciality|honor|type|
     |-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|
     |手机号(必)|密码(必)|姓名(必)|昵称(必)|性别(必)|地址|身份证|邮箱(必)|教育背景|学校|专业|实习经历|爱好|特长|荣誉|类型(0:学生 1:企业)|
@@ -139,7 +139,7 @@ NULL
 * url(GET)
   http://47.106.64.85/v1/student/getPortraitOss
 * header
-    
+  
   | access_token |
   | ---- |
   | string (Oauth 2.0)|
