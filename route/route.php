@@ -34,5 +34,7 @@ Route::post(':version/token','api/:version.token/token')->allowCrossDomain();
 //测试路由
 Route::get('index','index/index/index');
 
+//回调路由
+Route::get('callback','index/index/callback');
 //所有路由匹配不到情况下触发该路由
 Route::miss('\app\api\controller\Exception::miss');
